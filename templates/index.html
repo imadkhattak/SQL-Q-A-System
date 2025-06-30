@@ -5,14 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SQL Q&A ChatBot</title>
   <link rel="stylesheet" href="/static/style.css" />
+  <!-- Add Google Fonts for better typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto&display=swap" rel="stylesheet">
+  <!-- Add Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 </head>
 <body>
   <div class="chat-container">
-    <div class="chat-header">🧠 SQL Q&A ChatBot</div>
+    <div class="chat-header">
+      <span class="header-icon"><i class="fas fa-database"></i></span>
+      <span>SQL Q&A ChatBot</span>
+      <span class="header-avatar">
+        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sqlbot" alt="Bot Avatar" />
+      </span>
+    </div>
     <div class="chat-box" id="chat-box"></div>
     <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Ask your question here..." />
-      <button onclick="sendMessage()">➤</button>
+      <input type="text" id="user-input" placeholder="Ask your question here..." autocomplete="off" onkeydown="handleKeyDown(event)" />
+      <button id="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
--- Host: localhost    Database: shoppingmall
+-- Host: localhost    Database: imad_database
 -- ------------------------------------------------------
 -- Server version	8.0.42
 
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `aisle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aisle` (
-  `aisle_id` int NOT NULL AUTO_INCREMENT,
+  `aisle_id` int NOT NULL,
   `aisle_label` varchar(50) NOT NULL,
   `product_category` int DEFAULT NULL,
   `row_no` int NOT NULL,
@@ -31,12 +31,11 @@ CREATE TABLE `aisle` (
   `shelf_count` int NOT NULL,
   `capacity` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`aisle_id`),
   UNIQUE KEY `aisle_label` (`aisle_label`),
-  KEY `idx_product_category` (`product_category`),
-  KEY `idx_aisle_label` (`aisle_label`),
-  CONSTRAINT `aisle_ibfk_1` FOREIGN KEY (`product_category`) REFERENCES `category` (`category_id`) ON DELETE CASCADE
+  KEY `product_category` (`product_category`),
+  CONSTRAINT `aisle_ibfk_1` FOREIGN KEY (`product_category`) REFERENCES `category` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -57,10 +56,10 @@ DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
-  `category_id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int NOT NULL,
   `category_name` varchar(255) NOT NULL,
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +68,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Electronics'),(2,'Kitchen Appliances/Decors'),(3,'Home Appliances/Decor'),(4,'Beauty'),(5,'Medicine');
+INSERT INTO `category` VALUES (1,'Electronics'),(2,'Smartphones'),(3,'TVs'),(4,'Audio'),(5,'Wearables'),(6,'Cookware'),(7,'Kitchen Appliances'),(8,'Home Organization'),(9,'Dinnerware'),(10,'Kitchen Tools'),(11,'Home Decor'),(12,'Furniture'),(13,'Lighting'),(14,'Kitchen Gadgets'),(15,'Home Accessories'),(16,'Decorative Items'),(17,'Furniture'),(18,'Lighting'),(19,'Kitchen Appliances'),(20,'Home Decor'),(21,'Skincare'),(22,'Makeup'),(23,'Haircare'),(24,'Fragrances'),(25,'Nailcare');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,18 +80,16 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `customer_id` int NOT NULL AUTO_INCREMENT,
+  `customer_id` int NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `address` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`),
   UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `phone` (`phone`),
-  KEY `idx_email` (`email`),
-  KEY `idx_phone` (`phone`)
+  UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -102,6 +99,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES (1,'Ali Khan','ali.khan@example.com','03001234567','123 Main St, Lahore','2025-07-02 07:18:45','2025-07-02 07:18:45'),(2,'Sara Ali','sara.ali@example.com','03007894567','456 Elm St, Karachi','2025-07-02 07:18:45','2025-07-02 07:18:45'),(3,'Ahmed Raza','ahmed.raza@example.com','03005678901','789 Oak St, Islamabad','2025-07-02 07:18:45','2025-07-02 07:18:45'),(4,'Ayesha Khan','ayesha.khan@example.com','03003456789','901 Maple St, Peshawar','2025-07-02 07:18:45','2025-07-02 07:18:45'),(5,'Omar Farooq','omar.farooq@example.com','03002345678','234 Pine St, Quetta','2025-07-02 07:18:45','2025-07-02 07:18:45');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +111,7 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employee` (
-  `employee_id` int NOT NULL AUTO_INCREMENT,
+  `employee_id` int NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `phone` varchar(20) NOT NULL,
@@ -125,16 +123,13 @@ CREATE TABLE `employee` (
   `age` int NOT NULL,
   `cnic` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`employee_id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `cnic` (`cnic`),
-  KEY `idx_role_id` (`role_id`),
-  KEY `idx_email` (`email`),
-  KEY `idx_phone` (`phone`),
-  KEY `idx_cnic` (`cnic`),
-  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -144,6 +139,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+INSERT INTO `employee` VALUES (1,'Ali khan','Ali.khan@example.com','03001234567',1,'2020-01-01','Male','123 Main St','Lahore',30,'4210112345678','2025-07-02 07:18:25','2025-07-02 07:18:25'),(2,'Juniad Afridi','junaid.afridi@example.com','03007894567',2,'2018-06-01','Female','456 Elm St','Karachi',35,'4210112345679','2025-07-02 07:18:25','2025-07-02 07:18:25'),(3,'Salman khan','Salman.khan@example.com','03005678901',3,'2020-03-01','Male','789 Oak St','Islamabad',40,'4210112345680','2025-07-02 07:18:25','2025-07-02 07:18:25'),(4,'Arsalan khattak','Arsalan.Khattak@example.com','03003456789',4,'2019-09-01','Female','901 Maple St','Peshawar',28,'4210112345681','2025-07-02 07:18:25','2025-07-02 07:18:25'),(5,'Hamza khan','Hamza.khan@example.com','03002345678',5,'2020-09-01','Male','234 Pine St','Quetta',32,'4210112345682','2025-07-02 07:18:25','2025-07-02 07:18:25');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,18 +151,18 @@ DROP TABLE IF EXISTS `interaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `interaction` (
-  `interaction_id` int NOT NULL AUTO_INCREMENT,
+  `interaction_id` int NOT NULL,
   `customer_id` int DEFAULT NULL,
   `employee_id` int DEFAULT NULL,
   `interaction_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `interaction_type` enum('Phone','Email','In-person') NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`interaction_id`),
-  KEY `idx_customer_id ` (`customer_id`),
-  KEY `idx_employee_id` (`employee_id`),
-  CONSTRAINT `interaction_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
-  CONSTRAINT `interaction_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE
+  KEY `customer_id` (`customer_id`),
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `interaction_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `interaction_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -176,6 +172,7 @@ CREATE TABLE `interaction` (
 
 LOCK TABLES `interaction` WRITE;
 /*!40000 ALTER TABLE `interaction` DISABLE KEYS */;
+INSERT INTO `interaction` VALUES (1,1,1,'2022-01-01 10:00:00','In-person','2025-07-02 07:21:27','2025-07-02 07:21:27'),(2,2,2,'2022-01-02 11:00:00','Phone','2025-07-02 07:21:27','2025-07-02 07:21:27'),(3,3,3,'2022-01-03 12:00:00','Email','2025-07-02 07:21:27','2025-07-02 07:21:27'),(4,4,4,'2022-01-04 13:00:00','In-person','2025-07-02 07:21:27','2025-07-02 07:21:27'),(5,5,5,'2022-01-05 14:00:00','Phone','2025-07-02 07:21:27','2025-07-02 07:21:27');
 /*!40000 ALTER TABLE `interaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +199,7 @@ CREATE TABLE `mall_information` (
 
 LOCK TABLES `mall_information` WRITE;
 /*!40000 ALTER TABLE `mall_information` DISABLE KEYS */;
-INSERT INTO `mall_information` VALUES (1,'Peshawar mall','051-98767589','University Road Peshawar','9 am to 11 pm');
+INSERT INTO `mall_information` VALUES (1,'Peshawar','051-9875643','University raod Peshawar, Pakistan','10:00 AM - 10:00 PM');
 /*!40000 ALTER TABLE `mall_information` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +211,7 @@ DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
-  `product_id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
   `product_name` varchar(255) NOT NULL,
   `category_id` int DEFAULT NULL,
   `rack_id` int DEFAULT NULL,
@@ -225,12 +222,12 @@ CREATE TABLE `products` (
   `subcategory_id` int DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   KEY `category_id` (`category_id`),
-  KEY `rack_id` (`rack_id`),
   KEY `subcategory_id` (`subcategory_id`),
+  KEY `rack_id` (`rack_id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`),
-  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`rack_id`) REFERENCES `racks` (`rack_id`),
-  CONSTRAINT `products_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`),
+  CONSTRAINT `products_ibfk_3` FOREIGN KEY (`rack_id`) REFERENCES `racks` (`rack_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -251,12 +248,12 @@ DROP TABLE IF EXISTS `racks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `racks` (
-  `rack_id` int NOT NULL AUTO_INCREMENT,
+  `rack_id` int NOT NULL,
   `rack_label` varchar(255) NOT NULL,
   `location_description` varchar(255) NOT NULL,
   `floor` varchar(45) NOT NULL,
   PRIMARY KEY (`rack_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +262,7 @@ CREATE TABLE `racks` (
 
 LOCK TABLES `racks` WRITE;
 /*!40000 ALTER TABLE `racks` DISABLE KEYS */;
-INSERT INTO `racks` VALUES (1,'Electronics','Electronics Products Area','1'),(2,'Electronics','Mobile Phones Display Area','1'),(3,'Electronics','Television LED/LCD Devices','1'),(4,'Electronics: Audio Equipment Rack','Aisle 2, Left Side of the Mall','Ground'),(5,'Wearable Technology','Rack: Left side of the Mall, near the Electronics Section','1st Floor'),(6,'Kitchen Appliances: Cookware','Aisle B, Left side of the Mall','2nd Floor'),(7,'Kitchen Appliances: Small Kitchen Appliances','Aisle B, Right side of the Mall','2nd Floor'),(8,'Kitchen Appliances: Storage & Organization','Aisle C, Left side of the Mall','2nd Floor'),(9,'Kitchen Appliances: Tableware','Aisle C, Right side of the Mall','2nd Floor'),(10,'Kitchen Appliances: Tools & Gadgets','Aisle D, Left side of the Mall','2nd Floor'),(11,'Home Appliances: Kitchen Essentials','Rack: A Left side of the Mall','1st Floor'),(12,'Home Decor: Living Room','Rack: B Center of the Mall','1st Floor'),(13,'Cleaning Tools: Kitchen','Rack: C Right side of the Mall','1st Floor'),(14,'Bedding: Linen and Pillows','Rack: D Top Floor of the Mall','2nd Floor'),(15,'Furniture: Bedroom','Rack: E Ground floor of the Mall','Ground Floor'),(16,'Home Appliances: Home Decor','Rack: A Right side of the Mall, Aisle 1','1st Floor'),(17,'Home Appliances: Bedding and Linens','Rack: B Left side of the Mall, Aisle 2','2nd Floor'),(18,'Home Appliances: Lighting','Rack: B Right side of the Mall, Aisle 3','2nd Floor'),(19,'Home Appliances: Small Appliances','Rack: C Left side of the Mall, Aisle 4','3rd Floor'),(20,'Home Appliances: Home Accessories','Rack: C Right side of the Mall, Aisle 5','3rd Floor'),(21,'Beauty: Skincare','Rack: D Left side of the Mall, Aisle 1','1st Floor'),(22,'Beauty: Makeup','Rack: D Right side of the Mall, Aisle 2','1st Floor'),(23,'Beauty: Hair Care','Rack: E Left side of the Mall, Aisle 3','2nd Floor'),(24,'Beauty: Fragrances','Rack: E Right side of the Mall, Aisle 4','2nd Floor'),(25,'Beauty: Nail Care','Rack: F Left side of the Mall, Aisle 5','3rd Floor'),(26,'Pain Relief Rack','Aisle 1 near the entrance','1'),(27,'Prescription Rack','Aisle 2 next to the pharmacy','1'),(28,'Herbal Supplements Rack','Aisle 3, shelf near herbal products','1'),(29,'Vitamins Rack','Aisle 4, shelf at the back','1'),(30,'Medical Supplies Rack','Aisle 5, shelf near medical supplies','1');
+INSERT INTO `racks` VALUES (1,'A1','Main Electronics Section','Ground Floor'),(2,'B2','Smartphone Display Area','First Floor'),(3,'C3','TV and Audio Section','Second Floor'),(4,'D4','Home Appliance Section','Ground Floor'),(5,'E5','Wearables and Accessories','First Floor'),(6,'F6','Cookware and Kitchen Utensils','Second Floor'),(7,'G7','Home Decor and Furniture','Third Floor'),(8,'H8','Beauty and Personal Care','Fourth Floor');
 /*!40000 ALTER TABLE `racks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,19 +274,19 @@ DROP TABLE IF EXISTS `refund`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `refund` (
-  `refund_id` int NOT NULL AUTO_INCREMENT,
+  `refund_id` int NOT NULL,
   `transaction_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
   `refund_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `reason` text NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`refund_id`),
-  KEY `idx_transaction_id` (`transaction_id`),
-  KEY `idx_product_id` (`product_id`),
-  CONSTRAINT `refund_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE CASCADE,
-  CONSTRAINT `refund_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
+  KEY `transaction_id` (`transaction_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `refund_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`),
+  CONSTRAINT `refund_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -299,6 +296,7 @@ CREATE TABLE `refund` (
 
 LOCK TABLES `refund` WRITE;
 /*!40000 ALTER TABLE `refund` DISABLE KEYS */;
+INSERT INTO `refund` VALUES (1,1,1,1,'2022-01-06 10:00:00','Defective product','2025-07-02 07:22:20','2025-07-02 07:22:20'),(2,2,2,1,'2022-01-07 11:00:00','Not satisfied with product','2025-07-02 07:22:20','2025-07-02 07:22:20'),(3,3,3,1,'2022-01-08 12:00:00','Product not as described','2025-07-02 07:22:20','2025-07-02 07:22:20');
 /*!40000 ALTER TABLE `refund` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -310,7 +308,7 @@ DROP TABLE IF EXISTS `restocks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restocks` (
-  `restock_id` int NOT NULL AUTO_INCREMENT,
+  `restock_id` int NOT NULL,
   `product_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
   `restock_date` datetime NOT NULL,
@@ -326,6 +324,7 @@ CREATE TABLE `restocks` (
 
 LOCK TABLES `restocks` WRITE;
 /*!40000 ALTER TABLE `restocks` DISABLE KEYS */;
+INSERT INTO `restocks` VALUES (1,1,10,'2022-01-01 10:00:00'),(2,2,20,'2022-01-02 11:00:00'),(3,3,30,'2022-01-03 12:00:00'),(4,4,40,'2022-01-04 13:00:00'),(5,5,50,'2022-01-05 14:00:00');
 /*!40000 ALTER TABLE `restocks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -337,14 +336,13 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
-  `role_id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int NOT NULL,
   `role_name` varchar(50) NOT NULL,
   `role_description` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`role_id`),
-  UNIQUE KEY `role_name` (`role_name`),
-  KEY `idx_role_name` (`role_name`)
+  UNIQUE KEY `role_name` (`role_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -354,6 +352,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'Sales Representative','Responsible for assisting customers and making sales','2025-07-02 07:15:18','2025-07-02 07:15:18'),(2,'Store Manager','Oversees the daily operations of the store','2025-07-02 07:15:18','2025-07-02 07:15:18'),(3,'Customer Service Representative','Handles customer inquiries and issues','2025-07-02 07:15:18','2025-07-02 07:15:18'),(4,'Inventory Manager','Responsible for managing stock levels and ordering supplies','2025-07-02 07:15:18','2025-07-02 07:15:18'),(5,'Security Guard','Ensures the safety and security of the store and its customers','2025-07-02 07:15:18','2025-07-02 07:15:18');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,16 +364,16 @@ DROP TABLE IF EXISTS `salary`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `salary` (
-  `salary_id` int NOT NULL AUTO_INCREMENT,
+  `salary_id` int NOT NULL,
   `employee_id` int DEFAULT NULL,
   `salary_amount` decimal(10,2) NOT NULL,
   `pay_grade` varchar(10) NOT NULL,
   `effective_date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`salary_id`),
-  KEY `idx_employee_id` (`employee_id`),
-  CONSTRAINT `salary_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `salary_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -384,6 +383,7 @@ CREATE TABLE `salary` (
 
 LOCK TABLES `salary` WRITE;
 /*!40000 ALTER TABLE `salary` DISABLE KEYS */;
+INSERT INTO `salary` VALUES (1,1,30000.00,'A','2022-01-01','2025-07-02 07:24:32','2025-07-02 07:24:32'),(2,2,40000.00,'B','2022-01-01','2025-07-02 07:24:32','2025-07-02 07:24:32'),(3,3,35000.00,'A','2022-01-01','2025-07-02 07:24:32','2025-07-02 07:24:32'),(4,4,45000.00,'B','2022-01-01','2025-07-02 07:24:32','2025-07-02 07:24:32'),(5,5,32000.00,'A','2022-01-01','2025-07-02 07:24:32','2025-07-02 07:24:32');
 /*!40000 ALTER TABLE `salary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,7 +395,7 @@ DROP TABLE IF EXISTS `sales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sales` (
-  `sales_id` int NOT NULL AUTO_INCREMENT,
+  `sales_id` int NOT NULL,
   `product_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
   `sales_date` datetime NOT NULL,
@@ -412,6 +412,7 @@ CREATE TABLE `sales` (
 
 LOCK TABLES `sales` WRITE;
 /*!40000 ALTER TABLE `sales` DISABLE KEYS */;
+INSERT INTO `sales` VALUES (1,1,2,'2022-01-01 10:00:00',110000.00),(2,2,1,'2022-01-02 11:00:00',75000.00),(3,3,3,'2022-01-03 12:00:00',36000.00),(4,4,2,'2022-01-04 13:00:00',100000.00),(5,5,1,'2022-01-05 14:00:00',2500.00);
 /*!40000 ALTER TABLE `sales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -423,16 +424,16 @@ DROP TABLE IF EXISTS `stock_receive`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stock_receive` (
-  `receive_id` int NOT NULL AUTO_INCREMENT,
+  `receive_id` int NOT NULL,
   `product_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
   `receive_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `supplier` varchar(100) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`receive_id`),
-  KEY `idx_product_id` (`product_id`),
-  CONSTRAINT `stock_receive_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `stock_receive_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -442,6 +443,7 @@ CREATE TABLE `stock_receive` (
 
 LOCK TABLES `stock_receive` WRITE;
 /*!40000 ALTER TABLE `stock_receive` DISABLE KEYS */;
+INSERT INTO `stock_receive` VALUES (1,1,50,'2022-01-01 10:00:00','ABC Suppliers','2025-07-02 07:24:18','2025-07-02 07:24:18'),(2,2,30,'2022-01-02 11:00:00','XYZ Distributors','2025-07-02 07:24:18','2025-07-02 07:24:18'),(3,3,20,'2022-01-03 12:00:00','PQR Wholesalers','2025-07-02 07:24:18','2025-07-02 07:24:18'),(4,4,40,'2022-01-04 13:00:00','MNO Traders','2025-07-02 07:24:18','2025-07-02 07:24:18'),(5,5,60,'2022-01-05 14:00:00','JKL Suppliers','2025-07-02 07:24:18','2025-07-02 07:24:18');
 /*!40000 ALTER TABLE `stock_receive` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -453,11 +455,11 @@ DROP TABLE IF EXISTS `store`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `store` (
-  `store_id` int NOT NULL AUTO_INCREMENT,
+  `store_id` int NOT NULL,
   `store_name` varchar(255) NOT NULL,
   `store_location` varchar(255) NOT NULL,
   PRIMARY KEY (`store_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,7 +468,7 @@ CREATE TABLE `store` (
 
 LOCK TABLES `store` WRITE;
 /*!40000 ALTER TABLE `store` DISABLE KEYS */;
-INSERT INTO `store` VALUES (1,'Electronics Products','First Floor, Left Side'),(2,'Electronics Products','Left Side of the Mall'),(3,'LED/LCD Television Devices','Right side of the Mall'),(4,'Audio Equipment Center','Left side of the Mall'),(5,'Wearable Tech Devices','Left side of the Mall, near the Electronics Section'),(6,'Kitchen Appliances & Decor','Left side of the Mall'),(7,'Cleaning Supplies & Tools','Right side of the Mall'),(8,'Home Decor & Furnishings','Center of the Mall'),(9,'Bedding & Linen','Top floor of the Mall'),(10,'Furniture Gallery','Ground floor of the Mall'),(11,'Home Appliances Store','First Floor, Main Mall Area'),(12,'Decor Hub','Second Floor, Corner Section'),(13,'Bedding & Lighting Outlet','First Floor, Near Entrance'),(14,'Accessory World','Second Floor, Side Aisle'),(15,'Small Appliances Depot','Third Floor, Central Area'),(16,'Skincare Store','First Floor, Near Entrance'),(17,'Makeup Haven','First Floor, Central Area'),(18,'Hair Care Hub','Second Floor, Side Aisle'),(19,'Fragrance World','Second Floor, Corner Section'),(20,'Nail Care Studio','Third Floor, Central Area'),(21,'HealthPlus Pharmacy','First Floor, Near Entrance'),(22,'Medicure Store','First Floor, Near Entrance'),(23,'Wellness Drugs','First Floor, Near Entrance'),(24,'PharmaDirect','First Floor, Near Entrance'),(25,'CareMed Dispensary','First Floor, Near Entrance');
+INSERT INTO `store` VALUES (1,'Electronic World','Emporium Mall'),(2,'Fashion World','Packages Mall'),(3,'Home Appliances','Fortress Stadium'),(4,'Beauty Zone','Emporium Mall'),(5,'Kids World','Packages Mall');
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,13 +480,13 @@ DROP TABLE IF EXISTS `subcategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subcategory` (
-  `subcategory_id` int NOT NULL AUTO_INCREMENT,
+  `subcategory_id` int NOT NULL,
   `subcategory_name` varchar(255) NOT NULL,
   `category_id` int DEFAULT NULL,
   PRIMARY KEY (`subcategory_id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `subcategory_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -493,7 +495,7 @@ CREATE TABLE `subcategory` (
 
 LOCK TABLES `subcategory` WRITE;
 /*!40000 ALTER TABLE `subcategory` DISABLE KEYS */;
-INSERT INTO `subcategory` VALUES (1,'Home Appliances',1),(2,'Mobile Phones',1),(3,'Television',1),(4,'Audio Equipment',1),(5,'Wearable Technology',1),(6,'Cookware',2),(7,'Small Kitchen Appliances',2),(8,'Kitchen Storage & Organization',2),(9,'Tableware',2),(10,'Kitchen Tools & Gadgets',2),(11,'Home Decor',3),(12,'Bedding and Linens',3),(13,'Lighting',3),(14,'Small Appliances',3),(15,'Home Accessories',3),(16,'Skincare',4),(17,'Makeup',4),(18,'Hair Care',4),(19,'Fragrances',4),(20,'Nail Care',4),(21,'Over-the-Counter Medication',5),(22,'Prescription Medication',5),(23,'Herbal Supplements',5),(24,'Vitamins & Minerals',5),(25,'Medical Supplies',5);
+INSERT INTO `subcategory` VALUES (1,'Home Appliances',1),(2,'Mobile Phones',2),(3,'Televisions',3),(4,'Speakers and Soundbars',4),(5,'Smartwatches and Fitness Trackers',5),(6,'Cookware and Bakeware',6),(7,'Small Kitchen Appliances',7),(8,'Storage and Organization',8),(9,'Dinnerware and Glassware',9),(10,'Kitchen Tools and Gadgets',10),(11,'Decorative Items',11),(12,'Furniture and Decor',12),(13,'Lighting Fixtures',13),(14,'Kitchen Appliances',14),(15,'Home Accessories',15),(16,'Decorative Items',16),(17,'Furniture',17),(18,'Lighting',18),(19,'Kitchen Appliances',19),(20,'Home Decor',20),(21,'Skincare Products',21),(22,'Makeup and Cosmetics',22),(23,'Haircare Products',23),(24,'Fragrances and Perfumes',24),(25,'Nailcare Products',25);
 /*!40000 ALTER TABLE `subcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -505,7 +507,7 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction` (
-  `transaction_id` int NOT NULL AUTO_INCREMENT,
+  `transaction_id` int NOT NULL,
   `customer_id` int DEFAULT NULL,
   `variant_id` int DEFAULT NULL,
   `employee_id` int DEFAULT NULL,
@@ -515,14 +517,14 @@ CREATE TABLE `transaction` (
   `payment_method` enum('Cash','Card','Online') NOT NULL,
   `status` enum('Pending','Success','Failed') NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`transaction_id`),
-  KEY `idx_customer_id` (`customer_id`),
-  KEY `idx_variant_id` (`variant_id`),
-  KEY `idx_employee_id` (`employee_id`),
-  CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
-  CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`variant_id`) REFERENCES `variant` (`variant_id`) ON DELETE CASCADE,
-  CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE
+  KEY `customer_id` (`customer_id`),
+  KEY `variant_id` (`variant_id`),
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`variant_id`),
+  CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -532,6 +534,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES (1,1,1,1,1,'2022-01-01 12:00:00',55000.00,'Cash','Success','2025-07-02 07:20:15','2025-07-02 07:20:15'),(2,2,2,2,1,'2022-01-02 13:00:00',75000.00,'Card','Success','2025-07-02 07:20:15','2025-07-02 07:20:15'),(3,3,3,3,2,'2022-01-03 14:00:00',24000.00,'Cash','Success','2025-07-02 07:20:15','2025-07-02 07:20:15'),(4,4,4,4,1,'2022-01-04 15:00:00',50000.00,'Card','Success','2025-07-02 07:20:15','2025-07-02 07:20:15'),(5,5,5,5,3,'2022-01-05 16:00:00',7500.00,'Cash','Success','2025-07-02 07:20:15','2025-07-02 07:20:15');
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -543,18 +546,18 @@ DROP TABLE IF EXISTS `transaction_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction_item` (
-  `transaction_item_id` int NOT NULL AUTO_INCREMENT,
+  `transaction_item_id` int NOT NULL,
   `transaction_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`transaction_item_id`),
-  KEY `idx_transaction_id` (`transaction_id`),
-  KEY `idx_product_id` (`product_id`),
-  CONSTRAINT `transaction_item_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`) ON DELETE CASCADE,
-  CONSTRAINT `transaction_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
+  KEY `transaction_id` (`transaction_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `transaction_item_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`transaction_id`),
+  CONSTRAINT `transaction_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -564,6 +567,7 @@ CREATE TABLE `transaction_item` (
 
 LOCK TABLES `transaction_item` WRITE;
 /*!40000 ALTER TABLE `transaction_item` DISABLE KEYS */;
+INSERT INTO `transaction_item` VALUES (1,1,1,1,55000.00,'2025-07-02 07:20:30','2025-07-02 07:20:30'),(2,2,2,1,75000.00,'2025-07-02 07:20:30','2025-07-02 07:20:30'),(3,3,3,2,12000.00,'2025-07-02 07:20:30','2025-07-02 07:20:30'),(4,4,4,1,50000.00,'2025-07-02 07:20:30','2025-07-02 07:20:30'),(5,5,5,3,2500.00,'2025-07-02 07:20:30','2025-07-02 07:20:30');
 /*!40000 ALTER TABLE `transaction_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -575,7 +579,7 @@ DROP TABLE IF EXISTS `variants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `variants` (
-  `variant_id` int NOT NULL AUTO_INCREMENT,
+  `variant_id` int NOT NULL,
   `product_id` int DEFAULT NULL,
   `variant_type` varchar(255) DEFAULT NULL,
   `variant_value` varchar(255) DEFAULT NULL,
@@ -584,7 +588,7 @@ CREATE TABLE `variants` (
   PRIMARY KEY (`variant_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `variants_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=335 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -593,7 +597,7 @@ CREATE TABLE `variants` (
 
 LOCK TABLES `variants` WRITE;
 /*!40000 ALTER TABLE `variants` DISABLE KEYS */;
-INSERT INTO `variants` VALUES (1,1,'Size','7 kg',55000.00,1),(2,1,'Size','8 kg',58000.00,1),(3,1,'Color','White - 7 kg',55000.00,1),(4,1,'Color','Silver - 8 kg',58000.00,1),(5,2,'Color','Black',75000.00,1),(6,2,'Color','Stainless Steel',78000.00,1),(7,2,'Model','Double Door 300L',78000.00,1),(8,2,'Model','Single Door 200L',73000.00,1),(9,3,'Size','25 L',12000.00,1),(10,3,'Size','30 L',13000.00,1),(11,3,'Color','Black - 25 L',12000.00,1),(12,3,'Color','Silver - 30 L',13500.00,1),(13,4,'Capacity','1.5 Ton',50000.00,1),(14,4,'Capacity','2 Ton',60000.00,1),(15,4,'Color','White - 1.5 Ton',50000.00,1),(16,4,'Color','Silver - 2 Ton',60000.00,1),(17,5,'Capacity','1.7 L',2500.00,1),(18,5,'Color','Black - 1.7 L',2500.00,1),(19,6,'Model','12 Place Settings',70000.00,1),(20,6,'Model','14 Place Settings',80000.00,1),(21,7,'Color','Black',5000.00,1),(22,7,'Color','White',5200.00,1),(23,8,'Color','Red',3000.00,1),(24,8,'Color','Black',3200.00,1),(25,9,'Size','1.5 L',4000.00,1),(26,9,'Size','2 L',4200.00,1),(27,10,'Size','800 ml',6000.00,1),(28,10,'Size','1.2 L',6500.00,1),(29,11,'Capacity','200 L',60000.00,1),(30,11,'Capacity','250 L',65000.00,1),(31,12,'Color','Black',4000.00,1),(32,12,'Color','Silver',4200.00,1),(33,13,'Color','Blue',3000.00,1),(34,13,'Color','Pink',3200.00,1),(35,14,'Capacity','6.5 QT',8000.00,1),(36,14,'Capacity','8 QT',9000.00,1),(37,15,'Color','Red',15000.00,1),(38,15,'Color','Black',15500.00,1),(39,16,'Size','6 L',7000.00,1),(40,16,'Size','8 L',7500.00,1),(41,17,'Color','Black',5500.00,1),(42,17,'Color','White',5700.00,1),(43,18,'Size','3.5 L',10000.00,1),(44,18,'Size','4.2 L',11000.00,1),(45,19,'Size','6.5 QT',8000.00,1),(46,19,'Size','8 QT',8500.00,1),(47,20,'Model','Model A',12000.00,1),(48,20,'Model','Model B',13000.00,1),(49,21,'RAM','6GB',200000.00,1),(50,21,'Color','Black',200000.00,1),(51,21,'Color','White',200000.00,1),(52,22,'RAM','8GB',180000.00,1),(53,22,'Color','Gray',180000.00,1),(54,22,'Color','Gold',180000.00,1),(55,23,'RAM','8GB',120000.00,1),(56,23,'Color','Blue',120000.00,1),(57,23,'Color','Black',120000.00,1),(58,24,'RAM','8GB',150000.00,1),(59,24,'Color','White',150000.00,1),(60,24,'Color','Black',150000.00,1),(61,25,'RAM','6GB',70000.00,1),(62,25,'Color','Red',70000.00,1),(63,25,'Color','Green',70000.00,1),(64,26,'RAM','8GB',90000.00,1),(65,26,'Color','Black',90000.00,1),(66,26,'Color','Silver',90000.00,1),(67,27,'RAM','12GB',110000.00,1),(68,27,'Color','Blue',110000.00,1),(69,27,'Color','Gold',110000.00,1),(70,28,'RAM','8GB',95000.00,1),(71,28,'Color','Purple',95000.00,1),(72,28,'Color','Black',95000.00,1),(73,29,'RAM','4GB',20000.00,1),(74,29,'Color','Gray',20000.00,1),(75,29,'Color','Blue',20000.00,1),(76,30,'RAM','6GB',60000.00,1),(77,30,'Color','Black',60000.00,1),(78,30,'Color','White',60000.00,1),(79,31,'RAM','8GB',55000.00,1),(80,31,'Color','Green',55000.00,1),(81,31,'Color','Black',55000.00,1),(82,32,'RAM','12GB',80000.00,1),(83,32,'Color','Gray',80000.00,1),(84,32,'Color','Red',80000.00,1),(85,33,'RAM','16GB',220000.00,1),(86,33,'Color','Black',220000.00,1),(87,33,'Color','White',220000.00,1),(88,34,'RAM','4GB',30000.00,1),(89,34,'Color','Blue',30000.00,1),(90,34,'Color','Red',30000.00,1),(91,35,'RAM','8GB',230000.00,1),(92,35,'Color','Gold',230000.00,1),(93,35,'Color','Black',230000.00,1),(94,36,'RAM','6GB',40000.00,1),(95,36,'Color','Black',40000.00,1),(96,36,'Color','Blue',40000.00,1),(97,37,'RAM','8GB',200000.00,1),(98,37,'Color','White',200000.00,1),(99,37,'Color','Black',200000.00,1),(100,38,'RAM','8GB',80000.00,1),(101,38,'Color','Gray',80000.00,1),(102,38,'Color','Pink',80000.00,1),(103,39,'RAM','6GB',60000.00,1),(104,39,'Color','Blue',60000.00,1),(105,39,'Color','Black',60000.00,1),(106,40,'RAM','8GB',45000.00,1),(107,40,'Color','Red',45000.00,1),(108,40,'Color','White',45000.00,1),(109,41,'Size','55 inch',50000.00,1),(110,41,'Color','Black',50000.00,1),(111,42,'Size','65 inch',75000.00,1),(112,42,'Color','Silver',75000.00,1),(113,43,'Size','75 inch',100000.00,1),(114,43,'Color','Black',100000.00,1),(115,44,'Size','55 inch',85000.00,1),(116,44,'Color','Gray',85000.00,1),(117,45,'Size','65 inch',120000.00,1),(118,45,'Color','Black',120000.00,1),(119,46,'Type','TV Mount',2000.00,1),(120,46,'Type','HDMI Cable',500.00,1),(121,47,'Type','Soundbar',15000.00,1),(122,48,'Type','HDMI Cable',500.00,1),(123,49,'Type','TV Stand',10000.00,1),(124,50,'Type','Projector',40000.00,1),(125,51,'Size','10 inch',20000.00,1),(126,52,'Type','Smart TV Box',12000.00,1),(127,53,'Type','Wall Mount',3000.00,1),(128,54,'Size','32 inch',40000.00,1),(129,55,'Size','50 inch',60000.00,1),(130,56,'Size','43 inch',55000.00,1),(131,57,'Color','Black',12000.00,1),(132,57,'Color','White',12000.00,1),(133,58,'Color','Black',8000.00,1),(134,58,'Color','Blue',8000.00,1),(135,59,'Size','2.1 Channel',25000.00,1),(136,60,'Color','Red',7000.00,1),(137,60,'Color','Grey',7000.00,1),(138,61,'Size','5.1 Channel',50000.00,1),(139,62,'Color','Silver',15000.00,1),(140,63,'Type','Dynamic',3000.00,1),(141,64,'Channel','4 Channel',20000.00,1),(142,65,'Color','Wood',15000.00,1),(143,66,'Power','200W',22000.00,1),(144,67,'Color','Black',5000.00,1),(145,68,'Size','3 Speakers',35000.00,1),(146,69,'Color','Blue',6000.00,1),(147,70,'Type','Streaming',15000.00,1),(148,71,'Size','4 Speakers',18000.00,1),(149,72,'Power','20W',10000.00,1),(150,73,'Type','Acoustic',3000.00,1),(151,74,'Color','Black',30000.00,1),(152,74,'Color','Silver',30000.00,1),(153,75,'Color','Blue',15000.00,1),(154,75,'Color','Black',15000.00,1),(155,76,'Color','White',8000.00,1),(156,76,'Color','Black',8000.00,1),(157,77,'Color','Black',50000.00,1),(158,77,'Color','White',50000.00,1),(159,78,'Size','Small',12000.00,1),(160,78,'Size','Large',12000.00,1),(161,79,'Size','Standard',7000.00,1),(162,80,'Size','Regular',10000.00,1),(163,81,'Color','Gold',18000.00,1),(164,82,'Color','Black',25000.00,1),(165,83,'Size','M',45000.00,1),(166,83,'Size','L',45000.00,1),(167,84,'Size','10-inch',1500.00,1),(168,84,'Size','12-inch',1800.00,1),(169,85,'Pieces','5-Piece Set',7500.00,1),(170,85,'Pieces','7-Piece Set',8500.00,1),(171,86,'Size','8-inch',3200.00,1),(172,86,'Size','10-inch',3800.00,1),(173,87,'Size','2-quart',2500.00,1),(174,87,'Size','3-quart',3000.00,1),(175,88,'Color','Black',4500.00,1),(176,88,'Color','Silver',4700.00,1),(177,89,'Capacity','1.5 liters',3000.00,1),(178,89,'Capacity','2 liters',3500.00,1),(179,90,'Size','4-slice',8500.00,1),(180,90,'Size','6-slice',9500.00,1),(181,91,'Color','White',12500.00,1),(182,91,'Color','Red',13000.00,1),(183,92,'Set','5-piece',3500.00,1),(184,93,'Material','Wood',1200.00,1),(185,94,'Size','Large',2000.00,1),(186,95,'Material','Plastic',1100.00,1),(187,96,'Material','Porcelain',4500.00,1),(188,97,'Set','6-piece',2500.00,1),(189,98,'Material','Stainless Steel',5500.00,1),(190,99,'Material','Glass',3500.00,1),(191,100,'Material','Stainless Steel',800.00,1),(192,101,'Material','Stainless Steel',1200.00,1),(193,102,'Material','Plastic',1500.00,1),(194,103,'Material','Stainless Steel',1800.00,1),(195,104,'Color','Blue',5000.00,1),(196,104,'Color','Red',5000.00,1),(197,105,'Size','Small',1500.00,1),(198,105,'Size','Large',1500.00,1),(199,106,'Type','Analog',3000.00,1),(200,106,'Type','Digital',3000.00,1),(201,107,'Color','Green',2000.00,1),(202,107,'Color','Yellow',2000.00,1),(203,108,'Size','Medium',800.00,1),(204,108,'Size','Large',800.00,1),(205,109,'Color','White',15000.00,1),(206,109,'Color','Grey',15000.00,1),(207,110,'Material','Wood',4000.00,1),(208,110,'Material','Metal',4000.00,1),(209,111,'Color','Black',2500.00,1),(210,111,'Color','White',2500.00,1),(211,112,'Size','Medium',8000.00,1),(212,112,'Size','Large',8000.00,1),(213,113,'Material','Plastic',3000.00,1),(214,113,'Material','Metal',3000.00,1),(215,114,'Color','Silver',5000.00,1),(216,114,'Color','Black',5000.00,1),(217,115,'Color','White',6000.00,1),(218,115,'Color','Black',6000.00,1),(219,116,'Type','Basic',7000.00,1),(220,116,'Type','Deluxe',7000.00,1),(221,117,'Color','Red',1500.00,1),(222,117,'Color','Blue',1500.00,1),(223,118,'Color','Gold',2000.00,1),(224,118,'Color','Silver',2000.00,1),(225,119,'Size','Small',1500.00,1),(226,119,'Size','Large',1500.00,1),(227,120,'Material','Ceramic',4000.00,1),(228,120,'Material','Glass',4000.00,1),(229,121,'Size','Small',3000.00,1),(230,121,'Size','Medium',3000.00,1),(231,122,'Scent','Lavender',1200.00,1),(232,122,'Scent','Vanilla',1200.00,1),(233,124,'Size','50ml',2500.00,1),(234,124,'Size','100ml',4000.00,1),(235,124,'Fragrance','Rose',2500.00,1),(236,125,'Size','100ml',1800.00,1),(237,125,'Size','200ml',3200.00,1),(238,125,'Fragrance','Coconut',1800.00,1),(239,126,'Size','30ml',3000.00,1),(240,126,'Size','50ml',5000.00,1),(241,126,'Type','Hydrating',3000.00,1),(242,127,'Size','150ml',1200.00,1),(243,127,'Size','250ml',1800.00,1),(244,127,'Type','Foaming',1200.00,1),(245,128,'Type','Sheet Mask',800.00,1),(246,128,'Type','Clay Mask',1200.00,1),(247,128,'Type','Peel-off Mask',1000.00,1),(248,129,'Shade','Beige',3500.00,1),(249,129,'Shade','Natural',3500.00,1),(250,129,'Finish','Matte',3500.00,1),(251,130,'Shade','Red',1200.00,1),(252,130,'Shade','Pink',1200.00,1),(253,130,'Finish','Glossy',1200.00,1),(254,131,'Shade','Black',1500.00,1),(255,131,'Shade','Brown',1500.00,1),(256,131,'Type','Waterproof',1500.00,1),(257,132,'Shade','Warm',4500.00,1),(258,132,'Shade','Cool',4500.00,1),(259,132,'Type','Matte',4500.00,1),(260,133,'Type','Repair',1000.00,1),(261,133,'Type','Moisturizing',2000.00,1),(262,133,'Type','Anti-Dandruff',1200.00,1),(263,134,'Type','Deep Conditioning',2200.00,1),(264,134,'Type','Leave-in',2000.00,1),(265,134,'Type','Repair',2400.00,1),(266,135,'Type','Light',1500.00,1),(267,135,'Type','Medium',1700.00,1),(268,135,'Type','Heavy',1900.00,1),(269,136,'Type','Moisturizing',1200.00,1),(270,136,'Type','Repairing',1500.00,1),(271,136,'Type','Color-Safe',1800.00,1),(272,137,'Type','Cream',1800.00,1),(273,137,'Type','Gel',1500.00,1),(274,137,'Type','Foam',2000.00,1),(275,138,'Type','Hydrating',1200.00,1),(276,138,'Type','Nourishing',1300.00,1),(277,138,'Type','Frizz Control',1500.00,1),(278,139,'Type','Floral',4000.00,1),(279,139,'Type','Citrus',4000.00,1),(280,139,'Type','Woody',4000.00,1),(281,140,'Type','Fresh',3000.00,1),(282,140,'Type','Sweet',3000.00,1),(283,140,'Type','Spicy',3000.00,1),(284,141,'Type','Citrus',1500.00,1),(285,141,'Type','Floral',1500.00,1),(286,141,'Type','Mint',1500.00,1),(287,142,'Type','Aromatic',3500.00,1),(288,142,'Type','Citrus',3500.00,1),(289,142,'Type','Woody',3500.00,1),(290,143,'Type','Floral',3000.00,1),(291,143,'Type','Woody',3000.00,1),(292,143,'Type','Citrus',3000.00,1),(293,144,'Type','Matte',800.00,1),(294,144,'Type','Glossy',800.00,1),(295,144,'Type','Sheer',800.00,1),(296,145,'Type','Tinted',500.00,1),(297,145,'Type','Untinted',500.00,1),(298,145,'Type','Flavored',500.00,1),(299,146,'Type','Setting',1500.00,1),(300,146,'Type','Finishing',1500.00,1),(301,146,'Type','Hydrating',1500.00,1),(302,147,'Type','Liquid',1800.00,1),(303,147,'Type','Cream',1800.00,1),(304,147,'Type','Stick',1800.00,1),(305,148,'Type','Medium',1200.00,1),(306,148,'Type','Full',1200.00,1),(307,148,'Type','Light',1200.00,1),(308,149,'Type','Scrub',950.00,1),(309,149,'Type','Gel',950.00,1),(310,149,'Type','Cream',950.00,1),(311,150,'Type','Hydrating',1350.00,1),(312,150,'Type','Refreshing',1350.00,1),(313,150,'Type','Soothing',1350.00,1),(314,151,'Type','Aloe Vera',1200.00,1),(315,151,'Type','Rosewater',1200.00,1),(316,151,'Type','Lavender',1200.00,1),(317,152,'Type','Anti-Aging',2800.00,1),(318,152,'Type','Brightening',2800.00,1),(319,152,'Type','Hydrating',2800.00,1),(320,153,'Type','Balm',2200.00,1),(321,153,'Type','Oil',2200.00,1),(322,153,'Type','Cream',2200.00,1),(323,154,'Type','Matte',1800.00,1),(324,154,'Type','Shimmer',1800.00,1),(325,154,'Type','Liquid',1800.00,1),(326,155,'Type','Hydrating',500.00,1),(327,155,'Type','Nourishing',500.00,1),(328,155,'Type','Repairing',500.00,1),(329,156,'Type','Regular',600.00,1),(330,156,'Type','Extra Strength',700.00,1),(331,156,'Type','Sensitive Skin',800.00,1),(332,157,'Type','Fragrance',2500.00,1),(333,157,'Type','Unscented',2500.00,1),(334,157,'Type','Moisturizing',2500.00,1);
+INSERT INTO `variants` VALUES (1,1,'Color','White',55000.00,1),(2,2,'Size','Large',75000.00,1),(3,3,'Storage','128GB',12000.00,1),(4,4,'Color','Black',50000.00,1),(5,5,'Size','Small',2500.00,1);
 /*!40000 ALTER TABLE `variants` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -606,4 +610,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-30  0:37:34
+-- Dump completed on 2025-07-02 12:33:05

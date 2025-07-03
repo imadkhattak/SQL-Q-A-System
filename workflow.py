@@ -20,6 +20,7 @@ def write_query(state: dict):
     response = structured_llm.invoke(prompt)
     state = dict(state)
     state["query"] = response["query"]
+    print(f"\n🔍 Generated SQL Query:\n{state['query']}\n")
     return state
 
 def execute_query(state: dict):
@@ -31,13 +32,23 @@ def execute_query(state: dict):
     return state
 
 def generate_answer(state: dict):
+    memory = state.get("memory")
     llm = get_llm()
+    history = memory.buffer if memory is not None else ""
     prompt = (
+        f"Conversation history:\n{history}\n\n"
         "Given the following query result, generate a concise answer to the question.\n\n"
         f"Question: {state['question']}\n"
         f"Query: {state['query']}\n"
         f"Result: {state['result']}\n"
     )
+    # Optionally, use memory to save the context
+    if memory is not None:
+        memory.save_context(
+            {"input": state["question"]},
+            {"output": state.get("answer", str(state.get("result", "")))}
+        )
+
     response = llm.invoke(prompt)
     state = dict(state)
     state["answer"] = response

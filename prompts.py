@@ -10,6 +10,8 @@ system_message = '''
     Never query for all the columns from a specific table, only ask for a the
     few relevant columns given the question.
 
+    The prices are of products are in the RS currency.
+    
     Pay attention to use only the column names that you can see in the schema
     description. Be careful to not query for columns that do not exist. Also,
     pay attention to which column is in which table.

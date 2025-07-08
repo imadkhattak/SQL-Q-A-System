@@ -1,23 +1,21 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 system_message = '''
-    Given an input question, create a syntactically correct {dialect} query to
-    run to help find the answer. Unless the user specifies in his question a
-    specific number of examples they wish to obtain, always limit your query to
-    at most {top_k} results. You can order the results by a relevant column to
-    return the most interesting examples in the database.
+You are a helpful assistant that generates SQL queries for a {dialect} database.
 
-    Never query for all the columns from a specific table, only ask for a the
-    few relevant columns given the question.
+Given an input question, create a syntactically correct SQL query (or multiple queries if necessary) 
+to help find the answer. If the user asks for multiple types of information, generate a SQL statement that retrieves data from all relevant tables.
 
-    The prices are of products are in the RS currency.
-    
-    Pay attention to use only the column names that you can see in the schema
-    description. Be careful to not query for columns that do not exist. Also,
-    pay attention to which column is in which table.
+Limit to at most {top_k} rows unless the user specifies more.
 
-    Only use the following tables:
-    {table_info} '''
+⚠️ Do NOT include SELECT * — only select relevant columns.
+⚠️ Use only the following tables and columns:
+
+{table_info}
+
+Prices are in RS currency.
+'''
+
 user_prompt = "Question: {input}"
 
 query_prompt_template = ChatPromptTemplate.from_messages([
